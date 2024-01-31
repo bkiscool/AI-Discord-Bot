@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>AI-Discord-Bot</groupId>
+  <artifactId>AI-Discord-Bot</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <build>
+		<finalName>${project.name}</finalName>
+		<sourceDirectory>src/</sourceDirectory>
+		
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/</directory>
+			</resource>
+		</resources>
+		
+		<plugins>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.12.1</version>
+				<configuration>
+					<release>17</release>
+				</configuration>		        
+			</plugin>
+			
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+		          <execution>
+		            <phase>package</phase>
+		            <goals>
+		              <goal>shade</goal>
+		            </goals>
+		            <configuration>
+		              <relocations>
+						  
+		                <relocation>
+		                  <pattern>com.theokanning.openai-gpt3-java</pattern>
+		                  <shadedPattern>me.brandonkey.dependencies.com.theokanning.openai-gpt3-java</shadedPattern>
+		                </relocation>
+		                
+		                <relocation>
+		                  <pattern>com.googlecode.json-simple</pattern>
+		                  <shadedPattern>me.brandonkey.dependencies.com.theokanning.openai-gpt3-java</shadedPattern>
+		                </relocation>
+		                
+		                <relocation>
+		                  <pattern>net.dv8tion</pattern>
+		                  <shadedPattern>me.brandonkey.dependencies.com.theokanning.openai-gpt3-java</shadedPattern>
+		                </relocation>
+		                
+		              </relocations>
+		            </configuration>
+		          </execution>
+		        </executions>
+            </plugin>
+			
+			<plugin>
+		      <!-- Build an executable JAR -->
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-jar-plugin</artifactId>
+		      <version>3.1.0</version>
+		      <configuration>
+		        <archive>
+		          <manifest>
+		            <addClasspath>true</addClasspath>
+		            <classpathPrefix>lib/</classpathPrefix>
+		            <mainClass>me.brandonkey.bot.Main</mainClass>
+		          </manifest>
+		        </archive>
+		      </configuration>
+		    </plugin>
+			
+		</plugins>
+		
+	</build>
+  
+  <dependencies>
+	  
+    <dependency>
+      <groupId>com.theokanning.openai-gpt3-java</groupId>
+      <artifactId>service</artifactId>
+      <version>0.18.2</version>
+      <scope>compile</scope>
+    </dependency>
+    
+	<dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1.1</version>
+      <scope>compile</scope>
+   </dependency>
+	
+	<dependency>
+      <groupId>net.dv8tion</groupId>
+      <artifactId>JDA</artifactId>
+      <version>5.0.0-beta.19</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>club.minnced</groupId>
+          <artifactId>opus-java</artifactId>
+        </exclusion>
+        </exclusions>
+    </dependency>
+    
+  </dependencies>
+  
+</project>

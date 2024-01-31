@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 public class Main {
 	
 	private static String DISCORD_BOT_TOKEN;
+	private static String DISCORD_GUILD_ID;
 	private static String OPEN_AI_API_TOKEN;
 	private static boolean ENABLE_DISCORD_BOT;
 	private static boolean ENABLE_OPEN_AI_API;
@@ -22,7 +23,7 @@ public class Main {
 		
 		if (ENABLE_DISCORD_BOT)
 		{
-			new DiscordBot(DISCORD_BOT_TOKEN);
+			new DiscordBot(DISCORD_BOT_TOKEN, DISCORD_GUILD_ID);
 		}
 		
 		if (ENABLE_OPEN_AI_API)
@@ -44,6 +45,7 @@ public class Main {
 			try {
 				JSONObject jsonValues = new JSONObject();
 				jsonValues.put("discord-bot-token", "bot_token_here");
+				jsonValues.put("discord-guild-id", "guild_id_here");
 				jsonValues.put("openai-api-token", "api_token_here");
 				jsonValues.put("enable-discord-bot", true);
 				jsonValues.put("enable-openai-api", true);
@@ -70,6 +72,7 @@ public class Main {
 			JSONObject jsonValues = (JSONObject) jsonParser.parse(fileReader);
 			
 			DISCORD_BOT_TOKEN = (String) jsonValues.get("discord-bot-token");
+			DISCORD_GUILD_ID = (String) jsonValues.get("discord-guild-id");
 			OPEN_AI_API_TOKEN = (String) jsonValues.get("openai-api-token");
 			ENABLE_DISCORD_BOT = (boolean) jsonValues.get("enable-discord-bot");
 			ENABLE_OPEN_AI_API = (boolean) jsonValues.get("enable-openai-api");

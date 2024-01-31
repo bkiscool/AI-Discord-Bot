@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Built-By: bk
+Build-Jdk: 19
+Class-Path: lib/service-0.18.2.jar lib/client-0.18.2.jar lib/api-0.18.2.
+ jar lib/jtokkit-0.5.1.jar lib/retrofit-2.9.0.jar lib/adapter-rxjava2-2.
+ 9.0.jar lib/rxjava-2.0.0.jar lib/reactive-streams-1.0.3.jar lib/convert
+ er-jackson-2.9.0.jar lib/mbknor-jackson-jsonschema_2.12-1.0.34.jar lib/
+ scala-library-2.12.8.jar lib/validation-api-2.0.1.Final.jar lib/classgr
+ aph-4.8.21.jar lib/json-simple-1.1.1.jar lib/junit-4.10.jar lib/hamcres
+ t-core-1.1.jar lib/JDA-5.0.0-beta.19.jar lib/slf4j-api-1.7.36.jar lib/n
+ v-websocket-client-2.14.jar lib/okhttp-4.12.0.jar lib/okio-3.6.0.jar li
+ b/okio-jvm-3.6.0.jar lib/kotlin-stdlib-common-1.9.10.jar lib/kotlin-std
+ lib-jdk8-1.8.21.jar lib/kotlin-stdlib-1.8.21.jar lib/annotations-13.0.j
+ ar lib/kotlin-stdlib-jdk7-1.8.21.jar lib/commons-collections4-4.4.jar l
+ ib/trove4j-3.0.3.jar lib/jackson-core-2.16.0.jar lib/jackson-databind-2
+ .16.0.jar lib/jackson-annotations-2.16.0.jar
+Main-Class: me.brandonkey.bot.Main
+Created-By: Maven Integration for Eclipse
+

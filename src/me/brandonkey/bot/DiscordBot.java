@@ -18,9 +18,9 @@ import net.dv8tion.jda.api.utils.FileUpload;
 public class DiscordBot extends ListenerAdapter {
 	
 	private static JDA jda;
-	private static Guild test_guild;
+	private static Guild GUILD;
 
-	public DiscordBot(final String token) {
+	public DiscordBot(final String token, final String guildId) {
 		Logger.LOG.print("Starting Discord bot.");
 		try {
 			jda = JDABuilder.createDefault(token)
@@ -37,7 +37,7 @@ public class DiscordBot extends ListenerAdapter {
 		final SlashCommandData createImageCommand = Commands.slash("createimage", "Prompt the AI to create an image.")
 															.addOption(OptionType.STRING, "prompt", "The prompt to give to the AI.", true);
 		
-		test_guild = jda.getGuildById("721951670132801596");
+		GUILD = jda.getGuildById(guildId);
 		
 		jda.retrieveCommands().queue(commands -> commands.stream().forEach(command -> command.delete().queue()));
 		jda.updateCommands().queue();
@@ -147,7 +147,7 @@ public class DiscordBot extends ListenerAdapter {
 	public static void shutdown()
 	{
 		Logger.LOG.print("Shutting down the Discord bot.");
-		sendMessage("Shutting down..", test_guild.getDefaultChannel().asTextChannel()).complete();
+		sendMessage("Shutting down..", GUILD.getDefaultChannel().asTextChannel()).complete();
 		jda.shutdown();
 		Logger.LOG.print("Discord bot finished shutting down.");
 		
