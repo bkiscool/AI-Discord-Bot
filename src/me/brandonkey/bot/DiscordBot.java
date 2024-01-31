@@ -21,6 +21,7 @@ public class DiscordBot extends ListenerAdapter {
 	private static Guild test_guild;
 
 	public DiscordBot(final String token) {
+		Logger.LOG.print("Starting Discord bot.");
 		try {
 			jda = JDABuilder.createDefault(token)
 							.addEventListeners(this)
@@ -30,13 +31,18 @@ public class DiscordBot extends ListenerAdapter {
 			e.printStackTrace();
 		}
 		
-		final SlashCommandData promptCommand = Commands.slash("prompt", "Prompt the AI.").addOption(OptionType.STRING, "prompt", "The prompt to give to the AI.", true);
+		final SlashCommandData askCommand = Commands.slash("ask", "Prompt the AI.")
+													.addOption(OptionType.STRING, "prompt", "The prompt to give to the AI.", true);
 		final SlashCommandData shutdownCommand = Commands.slash("shutdown", "Shutdown the bot.");
+		final SlashCommandData createImageCommand = Commands.slash("createimage", "Prompt the AI to create an image.")
+															.addOption(OptionType.STRING, "prompt", "The prompt to give to the AI.", true);
 		
 		test_guild = jda.getGuildById("721951670132801596");
 		
-		test_guild.updateCommands().queue();
-		test_guild.updateCommands().addCommands(promptCommand, shutdownCommand).queue();
+		jda.retrieveCommands().queue(commands -> commands.stream().forEach(command -> command.delete().queue()));
+		jda.updateCommands().queue();
+		jda.updateCommands().addCommands(askCommand, shutdownCommand, createImageCommand).queue();
+		
 	}
 	
 	@Override
@@ -45,18 +51,19 @@ public class DiscordBot extends ListenerAdapter {
 		
 		switch (event.getName())
 		{
-			case "prompt":
+			case "ask":
+				Logger.LOG.print("Discord user ran /ask");
 				event.deferReply().queue();
 				
-				final String prompt = event.getOption("prompt", OptionMapping::getAsString);
+				final String askPrompt = event.getOption("prompt", OptionMapping::getAsString);
 				
 				new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						final String response = AI.prompt(prompt, event.getUser().getName());
-						final String discordResponse = "> " + prompt + "\n\n" + response;
+						final String response = AI.askAi(askPrompt, event.getUser().getName());
+						final String discordResponse = "> " + askPrompt + "\n\n" + response;
 						
 						if (discordResponse.length() > 2000)
 						{
@@ -76,9 +83,32 @@ public class DiscordBot extends ListenerAdapter {
 				
 				break;
 			case "shutdown":
+				Logger.LOG.print("Discord user ran /shutdown");
 				shutdown();
 				AI.shutdown();
 				System.exit(0);
+				
+				break;
+			case "createimage":
+				Logger.LOG.print("Discord user ran /createimage");
+				event.deferReply().queue();
+				
+				final String createImagePrompt = event.getOption("prompt", OptionMapping::getAsString);
+				
+				new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						final String responseUrl = AI.createImage(createImagePrompt, event.getUser().getName());
+						final String discordResponse = "> " + createImagePrompt;
+						
+						event.getHook().sendMessage(discordResponse).queue();
+						sendMessage(responseUrl, event.getMessageChannel()).queue();
+						
+					}
+					
+				}.run();
 				
 				break;
 			default:
@@ -91,7 +121,8 @@ public class DiscordBot extends ListenerAdapter {
 	@Override
 	public void onReady(ReadyEvent event)
 	{
-		System.out.println("Discord bot ready.");
+		Logger.LOG.print("Discord bot is ready.");
+		
 	}
 	
 	/*
@@ -109,16 +140,16 @@ public class DiscordBot extends ListenerAdapter {
 	
 	private static MessageCreateAction sendMessage(final String message, final MessageChannel channel)
 	{
-		System.out.println("[-] " + message);
-		
+		Logger.LOG.print("Sending message: " + message);
 		return channel.sendMessage(message);
 	}
 	
 	public static void shutdown()
 	{
-		System.out.println("Shutting down the Discord bot.");
+		Logger.LOG.print("Shutting down the Discord bot.");
 		sendMessage("Shutting down..", test_guild.getDefaultChannel().asTextChannel()).complete();
 		jda.shutdown();
+		Logger.LOG.print("Discord bot finished shutting down.");
 		
 	}
 
